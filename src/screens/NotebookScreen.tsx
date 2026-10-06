@@ -1,6 +1,7 @@
 
 import { districts } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
+import { DistrictIcon } from "../components/DistrictIcon";
 
 export function NotebookScreen() {
   const progress = useGameStore((s) => s.progress);
@@ -17,7 +18,9 @@ export function NotebookScreen() {
         {districts.map((district) => (
           <article className="notebook-card" key={district.key}>
             <div className="notebook-card-header">
-              <span className="notebook-icon" style={{ color: district.color }}>{district.icon}</span>
+              <span className="notebook-icon" style={{ color: district.color }}>
+                <DistrictIcon district={district.key} size={24} />
+              </span>
               <div>
                 <span className="card-kicker">{progress[district.key]}% DESCOBERTO</span>
                 <h2>{district.label}</h2>

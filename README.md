@@ -259,3 +259,10 @@ Principais mudanças:
   (`playableDistricts`). Progresso salvo da v16 é preservado.
 - Observação: todas as 8 missões originais já estão implementadas (a lista
   "O que já funciona" acima é da primeira versão).
+
+## Tipografia e ícones — v17.1
+- Escala única de 7 tamanhos em `:root` (`--fs-xs` 12px até `--fs-2xl`), pensada para
+  Chromebook 1366×768. Nenhum texto abaixo de 12px. Use sempre os tokens em CSS novo.
+- Ícones dos bairros em `src/components/DistrictIcon.tsx` (biblioteca `lucide-react`),
+  cada um repetindo o símbolo do prédio no mapa.
+- Cartão do pino maior (nome 16px, descrição 14px) e abrindo para a esquerda nos bairros da direita.

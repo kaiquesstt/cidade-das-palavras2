@@ -2,6 +2,7 @@
 import { districts, playableDistricts } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
 import type { MasteryStage } from "../types";
+import { DistrictIcon } from "../components/DistrictIcon";
 
 const stages: Array<{ key: MasteryStage; label: string }> = [
   { key: "recognize", label: "Reconhecer" },
@@ -105,7 +106,7 @@ export function ProgressScreen() {
                 className="progress-symbol"
                 style={{ background: district.color }}
               >
-                {district.icon}
+                <DistrictIcon district={district.key} size={20} />
               </span>
               <div>
                 <h2>{district.label}</h2>

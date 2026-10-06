@@ -4,6 +4,7 @@ import gsap from "gsap";
 import cityMap from "../assets/city-map.webp";
 import { districts } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
+import { DistrictIcon } from "./DistrictIcon";
 
 export function CityMap() {
   const root = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ export function CityMap() {
           <button
             key={district.key}
             type="button"
-            className={`district-pin ${isSelected ? "selected" : ""} ${isRestored ? "restored" : ""} ${isNewlyRestored ? "newly-restored" : ""}`}
+            className={`district-pin ${district.x > 62 ? "label-left" : ""} ${isSelected ? "selected" : ""} ${isRestored ? "restored" : ""} ${isNewlyRestored ? "newly-restored" : ""}`}
             style={{
               left: `${district.x}%`,
               top: `${district.y}%`,
@@ -75,7 +76,7 @@ export function CityMap() {
             onClick={() => selectDistrict(district.key)}
           >
             <span className="pin-core" aria-hidden="true">
-              <span>{district.icon}</span>
+              <DistrictIcon district={district.key} size={22} />
             </span>
             <span className="pin-label">
               <strong>{district.shortLabel}</strong>
@@ -83,7 +84,13 @@ export function CityMap() {
               <span className="pin-progress" aria-hidden="true">
                 <i style={{ width: `${progress[district.key]}%` }} />
               </span>
-              <em>{isRestored ? "RESTAURADO" : `${progress[district.key]}%`}</em>
+              <em>
+                {district.hasMission === false
+                  ? "Em construção"
+                  : isRestored
+                    ? "Restaurado"
+                    : `${progress[district.key]}% de domínio`}
+              </em>
             </span>
             {isRestored && <span className="restored-star" aria-hidden="true">★</span>}
           </button>

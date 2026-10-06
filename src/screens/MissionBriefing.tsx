@@ -3,6 +3,7 @@ import { TeacherGuide } from "../components/TeacherGuide";
 import { districts, districtByKey } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
 import type { DistrictKey, ViewKey } from "../types";
+import { DistrictIcon } from "../components/DistrictIcon";
 
 const missionInfo: Record<
   DistrictKey,
@@ -126,7 +127,9 @@ export function MissionBriefing() {
           </strong>
         </div>
 
-        <span className="briefing-icon">{district.icon}</span>
+        <span className="briefing-icon">
+          <DistrictIcon district={district.key} size={30} />
+        </span>
         <span className="eyebrow">BRIEFING DA MISSÃO</span>
         <h1>{district.label}</h1>
         <p className="briefing-lead">{district.purpose}</p>

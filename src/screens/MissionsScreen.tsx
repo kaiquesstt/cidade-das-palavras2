@@ -1,6 +1,7 @@
 
 import { districts } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
+import { DistrictIcon } from "../components/DistrictIcon";
 
 export function MissionsScreen() {
   const progress = useGameStore((s) => s.progress);
@@ -22,7 +23,9 @@ export function MissionsScreen() {
             key={district.key}
             style={{ "--district-color": district.color } as React.CSSProperties}
           >
-            <div className="district-card-icon">{district.icon}</div>
+            <div className="district-card-icon">
+              <DistrictIcon district={district.key} size={26} />
+            </div>
             <div>
               <span className="card-kicker">
                 {district.hasMission === false
