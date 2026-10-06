@@ -1,7 +1,7 @@
 
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
-import chargeImage from "../assets/charge-pesquisando-juntos.webp";
+import { chargeCases } from "../data/chargeCases";
 import { useGameStore } from "../store/useGameStore";
 
 type Stage = "investigate" | "classify" | "justify" | "contrast" | "apply" | "produce" | "complete";
@@ -18,111 +18,6 @@ const stageLabels: Record<Stage, string> = {
   complete: "Concluir"
 };
 
-const observationQuestions = [
-  {
-    q: "O que os personagens estão fazendo?",
-    a: "Eles estão no mesmo trabalho, mas cada estudante usa o celular de forma individual, sem construir a pesquisa coletivamente."
-  },
-  {
-    q: "Qual é a reação da professora?",
-    a: "A professora demonstra preocupação e estranhamento, porque o grupo deveria estar colaborando, mas cada estudante está isolado."
-  },
-  {
-    q: "Qual é a relação entre texto e imagem?",
-    a: "O texto e a imagem se completam. A proposta é “trabalho em grupo”, mas a imagem mostra justamente a ausência dessa colaboração."
-  },
-  {
-    q: "O que a charge critica?",
-    a: "Ela critica o uso superficial do celular e das redes sociais em situações que exigem diálogo, pesquisa e participação real."
-  },
-  {
-    q: "Onde está o humor ou a ironia?",
-    a: "A ironia aparece no contraste entre a ideia de colaboração e o comportamento individual dos estudantes."
-  }
-];
-
-const classifications = [
-  {
-    id: "charge",
-    label: "Charge",
-    correct: true,
-    feedback: "Correto. A cena usa linguagem verbal e visual para construir humor e crítica sobre um comportamento atual."
-  },
-  {
-    id: "tirinha",
-    label: "Tirinha",
-    correct: false,
-    feedback: "A tirinha costuma desenvolver uma pequena narrativa em sequência de quadros. Aqui a crítica está concentrada em uma única cena."
-  },
-  {
-    id: "cartaz",
-    label: "Cartaz",
-    correct: false,
-    feedback: "O cartaz geralmente divulga, orienta ou persuade de modo direto. Aqui o objetivo principal é comentar criticamente a situação."
-  },
-  {
-    id: "noticia",
-    label: "Notícia",
-    correct: false,
-    feedback: "A notícia prioriza a informação sobre fatos. Nesta cena, o foco é a crítica e a reflexão."
-  }
-];
-
-const evidenceOptions = [
-  { id: "critica", label: "Critica um comportamento contemporâneo.", correct: true },
-  { id: "visual", label: "O sentido depende da relação entre texto e imagem.", correct: true },
-  { id: "ironia", label: "A ironia e o humor ajudam a construir a crítica.", correct: true },
-  { id: "nome", label: "Há personagens com nomes próprios.", correct: false },
-  { id: "sequencia", label: "Há vários quadros formando uma sequência narrativa.", correct: false }
-];
-
-const contrastOptions = [
-  {
-    id: "estrutura",
-    label: "Aqui a crítica se concentra em uma única cena; não há uma sequência narrativa de quadros.",
-    correct: true
-  },
-  {
-    id: "cor",
-    label: "Não é tirinha porque o desenho está colorido.",
-    correct: false
-  },
-  {
-    id: "politica",
-    label: "Não é tirinha porque toda charge precisa falar de política.",
-    correct: false
-  }
-];
-
-const applicationOptions = [
-  {
-    id: "grupo",
-    title: "Trabalho em grupo sem colaboração",
-    text: "Quatro alunos sentam juntos, mas cada um procura apenas uma resposta pronta no próprio celular.",
-    correct: true
-  },
-  {
-    id: "receita",
-    title: "Receita de bolo",
-    text: "Um texto apresenta ingredientes, quantidades e o passo a passo de preparo.",
-    correct: false
-  },
-  {
-    id: "aviso",
-    title: "Aviso da escola",
-    text: "Um cartaz informa a data e o horário de uma reunião de pais.",
-    correct: false
-  }
-];
-
-const scenarios = ["Trabalho em grupo", "Fila da cantina", "Biblioteca"];
-const targets = ["uso excessivo do celular", "querer apenas uma resposta pronta", "fingir participação sem colaborar"];
-const ironicLines = [
-  "“Que trabalho em equipe impressionante!”",
-  "“Pesquisar juntos ficou muito mais fácil: ninguém precisa conversar.”",
-  "“Excelente colaboração... cada um no seu próprio mundo.”"
-];
-
 export function ChargeMissionScreen() {
   const setActiveView = useGameStore((s) => s.setActiveView);
   const markStage = useGameStore((s) => s.markStage);
@@ -132,6 +27,10 @@ export function ChargeMissionScreen() {
   const mastery = useGameStore((s) => s.mastery);
   const xp = useGameStore((s) => s.xp);
 
+  const achievements = useGameStore((s) => s.achievements);
+  const districtProgress = useGameStore((s) => s.progress.charge);
+
+  const [caseId, setCaseId] = useState<string | null>(null);
   const [stage, setStage] = useState<Stage>("investigate");
   const [rewardMessage, setRewardMessage] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
@@ -146,6 +45,10 @@ export function ChargeMissionScreen() {
   const [line, setLine] = useState("");
 
   const stageIndex = stageOrder.indexOf(stage);
+  const activeCase = chargeCases.find((item) => item.id === caseId) ?? null;
+  // "c" é usado nos cálculos; antes da escolha do caso, a tela mostra a seleção.
+  const c = activeCase ?? chargeCases[0];
+  const isCaseDone = (badge: string) => achievements.includes(badge);
 
   const teacherText = useMemo(() => {
     switch (stage) {
@@ -162,21 +65,38 @@ export function ChargeMissionScreen() {
       case "produce":
         return "Agora construa o núcleo de uma charge: uma situação, um alvo de crítica e uma fala irônica.";
       case "complete":
-        return "Missão concluída. Você reconheceu, explicou, aplicou e produziu. Esse é o percurso que queremos repetir nos outros distritos.";
+        return "Caso concluído. Você reconheceu, explicou, aplicou e produziu. Se quiser aprofundar, escolha outro caso: cada charge treina o olhar crítico de um jeito diferente.";
     }
   }, [stage]);
 
-  const selectedClassification = classifications.find((item) => item.id === classification);
+  const selectedClassification = c.classifications.find((item) => item.id === classification);
   const correctClassification = selectedClassification?.correct ?? false;
 
-  const correctEvidenceIds = evidenceOptions.filter((item) => item.correct).map((item) => item.id).sort();
+  const correctEvidenceIds = c.evidence.filter((item) => item.correct).map((item) => item.id).sort();
   const evidenceSuccess =
     evidenceChecked &&
     JSON.stringify([...evidence].sort()) === JSON.stringify(correctEvidenceIds);
 
-  const contrastSuccess = contrastOptions.find((item) => item.id === contrast)?.correct ?? false;
-  const applicationSuccess = applicationOptions.find((item) => item.id === application)?.correct ?? false;
+  const selectedContrast = c.contrast.find((item) => item.id === contrast);
+  const contrastSuccess = selectedContrast?.correct ?? false;
+  const applicationSuccess = c.applications.find((item) => item.id === application)?.correct ?? false;
   const productionReady = Boolean(scenario && target && line);
+
+  function startCase(id: string) {
+    setCaseId(id);
+    setStage("investigate");
+    setZoom(1);
+    setOpenObservation(null);
+    setClassification(null);
+    setEvidence([]);
+    setEvidenceChecked(false);
+    setContrast(null);
+    setApplication(null);
+    setScenario("");
+    setTarget("");
+    setLine("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   function go(next: Stage) {
     setStage(next);
@@ -192,7 +112,7 @@ export function ChargeMissionScreen() {
 
   function selectClassification(id: string) {
     setClassification(id);
-    const item = classifications.find((option) => option.id === id);
+    const item = c.classifications.find((option) => option.id === id);
     if (item?.correct) awardMastery("recognize", "Reconhecer concluído");
   }
 
@@ -205,22 +125,71 @@ export function ChargeMissionScreen() {
 
   function selectContrast(id: string) {
     setContrast(id);
-    const item = contrastOptions.find((option) => option.id === id);
+    const item = c.contrast.find((option) => option.id === id);
     if (item?.correct) addAchievement("Mestre dos contrastes");
   }
 
   function selectApplication(id: string) {
     setApplication(id);
-    const item = applicationOptions.find((option) => option.id === id);
+    const item = c.applications.find((option) => option.id === id);
     if (item?.correct) awardMastery("apply", "Aplicar concluído");
   }
 
   function completeProduction() {
     if (!productionReady) return;
     awardMastery("produce", "Produzir concluído");
-    addAchievement("Cronista da crítica");
+    addAchievement(c.badge);
     addAchievement("Autor da cidade");
     go("complete");
+  }
+
+  if (!activeCase) {
+    return (
+      <main className="charge-v6-page">
+        <header className="charge-v6-header">
+          <div className="charge-v6-title">
+            <span className="eyebrow">DISTRITO DA CHARGE</span>
+            <h1>Escolha um caso para investigar</h1>
+            <small>
+              Concluir qualquer caso restaura o distrito. Cada caso extra rende um selo próprio.
+            </small>
+          </div>
+          <button type="button" className="secondary-action" onClick={() => setActiveView("map")}>
+            ← Voltar ao mapa
+          </button>
+        </header>
+
+        <div className="charge-case-grid">
+          {chargeCases.map((item) => {
+            const done = isCaseDone(item.badge);
+            return (
+              <button
+                type="button"
+                key={item.id}
+                className={`charge-case-card ${done ? "done" : ""}`}
+                onClick={() => startCase(item.id)}
+              >
+                <span className="charge-case-thumb">
+                  <img src={item.image} alt="" />
+                </span>
+                <span className="charge-case-body">
+                  <span className="charge-case-number">Caso {item.number}</span>
+                  <strong>“{item.title}”</strong>
+                  <span>{item.subtitle}</span>
+                  <em>{done ? `✓ Concluído · selo ${item.badge}` : "Ainda não investigado"}</em>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {districtProgress === 100 && (
+          <p className="charge-case-note">
+            O distrito já está restaurado. Os outros casos servem para aprofundar a leitura crítica.
+          </p>
+        )}
+      </main>
+    );
   }
 
   return (
@@ -229,8 +198,8 @@ export function ChargeMissionScreen() {
       <header className="charge-v6-header">
         <div className="charge-v6-title">
           <span className="eyebrow">DISTRITO DA CHARGE</span>
-          <h1>Missão: “Pesquisando juntos?”</h1>
-          <small>Celular, redes sociais e vida escolar</small>
+          <h1>Caso {c.number}: “{c.title}”</h1>
+          <small>{c.subtitle}</small>
         </div>
 
         <div className="charge-v6-stage-progress" aria-label={`Etapa ${stage === "complete" ? 6 : stageIndex + 1} de 6`}>
@@ -267,9 +236,14 @@ export function ChargeMissionScreen() {
           </button>
         </div>
 
-        <button type="button" className="secondary-action" onClick={() => setActiveView("map")}>
-          ← Voltar ao mapa
-        </button>
+        <div className="charge-header-actions">
+          <button type="button" className="secondary-action" onClick={() => setCaseId(null)}>
+            Trocar de caso
+          </button>
+          <button type="button" className="secondary-action" onClick={() => setActiveView("map")}>
+            ← Voltar ao mapa
+          </button>
+        </div>
       </header>
 
       <div className="charge-v6-grid">
@@ -316,8 +290,8 @@ export function ChargeMissionScreen() {
 
             <div className="charge-v6-image-frame">
               <img
-                src={chargeImage}
-                alt="Charge sobre trabalho em grupo, celulares e redes sociais"
+                src={c.image}
+                alt={c.imageAlt}
                 style={{ transform: `scale(${zoom})` }}
               />
             </div>
@@ -335,7 +309,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-observation-list">
-                  {observationQuestions.map((item, index) => (
+                  {c.observations.map((item, index) => (
                     <button
                       type="button"
                       key={item.q}
@@ -343,15 +317,17 @@ export function ChargeMissionScreen() {
                       onClick={() => setOpenObservation(openObservation === index ? null : index)}
                     >
                       <strong>{item.q}</strong>
-                      <span>{openObservation === index ? item.a : "Toque para analisar"}</span>
+                      <span>{openObservation === index ? item.a : "Clique para analisar"}</span>
                     </button>
                   ))}
                 </div>
 
                 <div className="charge-v6-tip">
                   <b>Dica da professora</b>
-                  <p>Observe a contradição entre “trabalho em grupo” e o comportamento individual dos estudantes.</p>
+                  <p>{c.tip}</p>
                 </div>
+
+                {c.sensitive && <SupportNote />}
 
                 <button type="button" className="primary-action charge-v6-next" onClick={() => go("classify")}>
                   Próxima etapa: Classificar →
@@ -370,7 +346,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-options">
-                  {classifications.map((item) => (
+                  {c.classifications.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -408,7 +384,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-evidence">
-                  {evidenceOptions.map((item) => (
+                  {c.evidence.map((item) => (
                     <label key={item.id}>
                       <input
                         type="checkbox"
@@ -434,9 +410,7 @@ export function ChargeMissionScreen() {
                   <div className={`charge-v6-feedback ${evidenceSuccess ? "success" : "warning"}`}>
                     <b>{evidenceSuccess ? "Justificativa consistente." : "Ainda há evidências inadequadas."}</b>
                     <p>
-                      {evidenceSuccess
-                        ? "Você mostrou que a crítica, a relação texto–imagem e a ironia sustentam a classificação."
-                        : "Evite características acidentais. Procure evidências ligadas à finalidade e à construção de sentido."}
+                      {evidenceSuccess ? c.evidenceSuccess : c.evidenceWarning}
                     </p>
                   </div>
                 )}
@@ -460,7 +434,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-options stacked">
-                  {contrastOptions.map((item) => (
+                  {c.contrast.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -472,14 +446,10 @@ export function ChargeMissionScreen() {
                   ))}
                 </div>
 
-                {contrast && (
+                {selectedContrast && (
                   <div className={`charge-v6-feedback ${contrastSuccess ? "success" : "warning"}`}>
                     <b>{contrastSuccess ? "Boa diferenciação." : "Essa diferença é superficial."}</b>
-                    <p>
-                      {contrastSuccess
-                        ? "A estrutura e a finalidade ajudam a diferenciar os gêneros com muito mais segurança."
-                        : "Cor e tema político não definem sozinhos charge ou tirinha."}
-                    </p>
+                    <p>{selectedContrast.feedback}</p>
                   </div>
                 )}
 
@@ -497,12 +467,12 @@ export function ChargeMissionScreen() {
                   <span>05</span>
                   <div>
                     <h2>Aplique o critério</h2>
-                    <p>Qual situação abaixo poderia gerar uma charge usando crítica e ironia?</p>
+                    <p>{c.applicationPrompt}</p>
                   </div>
                 </div>
 
                 <div className="charge-v6-applications">
-                  {applicationOptions.map((item) => (
+                  {c.applications.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -519,9 +489,7 @@ export function ChargeMissionScreen() {
                   <div className={`charge-v6-feedback ${applicationSuccess ? "success" : "warning"}`}>
                     <b>{applicationSuccess ? "Você transferiu o critério." : "Reveja a finalidade."}</b>
                     <p>
-                      {applicationSuccess
-                        ? "Essa situação permite comentar criticamente um comportamento atual por meio do humor."
-                        : "Procure uma situação social que possa ser criticada, e não apenas um texto informativo ou instrucional."}
+                      {applicationSuccess ? c.applicationSuccess : c.applicationWarning}
                     </p>
                   </div>
                 )}
@@ -548,7 +516,7 @@ export function ChargeMissionScreen() {
                   <div>
                     <b>Cenário</b>
                     <div>
-                      {scenarios.map((item) => (
+                      {c.scenarios.map((item) => (
                         <button type="button" key={item} className={scenario === item ? "selected" : ""} onClick={() => setScenario(item)}>
                           {item}
                         </button>
@@ -558,7 +526,7 @@ export function ChargeMissionScreen() {
                   <div>
                     <b>Alvo da crítica</b>
                     <div>
-                      {targets.map((item) => (
+                      {c.targets.map((item) => (
                         <button type="button" key={item} className={target === item ? "selected" : ""} onClick={() => setTarget(item)}>
                           {item}
                         </button>
@@ -568,7 +536,7 @@ export function ChargeMissionScreen() {
                   <div>
                     <b>Fala irônica</b>
                     <div className="vertical">
-                      {ironicLines.map((item) => (
+                      {c.ironicLines.map((item) => (
                         <button type="button" key={item} className={line === item ? "selected" : ""} onClick={() => setLine(item)}>
                           {item}
                         </button>
@@ -595,8 +563,10 @@ export function ChargeMissionScreen() {
               <>
                 <div className="charge-v6-complete">
                   <span>✓</span>
-                  <h2>Distrito da Charge restaurado</h2>
-                  <p>Você completou os quatro níveis de domínio desta missão.</p>
+                  <h2>Caso {c.number} concluído</h2>
+                  <p>
+                    Você completou os quatro níveis de domínio com a charge “{c.title}” e ganhou o selo {c.badge}.
+                  </p>
                   <strong className="charge-v8-xp-summary">Missão concluída · XP atual: {xp}/400</strong>
                 </div>
 
@@ -607,7 +577,12 @@ export function ChargeMissionScreen() {
                   <article><b>Produzir</b><span>100%</span><p>Construiu o núcleo de uma nova charge.</p></article>
                 </div>
 
+                {c.sensitive && <SupportNote />}
+
                 <div className="charge-v6-final-actions">
+                  <button type="button" className="secondary-action" onClick={() => setCaseId(null)}>
+                    Investigar outro caso
+                  </button>
                   <button type="button" className="secondary-action" onClick={() => setActiveView("progress")}>
                     Ver meu progresso
                   </button>
@@ -621,5 +596,20 @@ export function ChargeMissionScreen() {
         </section>
       </div>
     </main>
+  );
+}
+
+/** Aviso de apoio exibido nos casos que tratam de violência. */
+function SupportNote() {
+  return (
+    <aside className="charge-support-note" aria-label="Onde buscar ajuda">
+      <b>Se você ou alguém próximo vive algo parecido</b>
+      <p>
+        Você não precisa lidar com isso sozinho(a). Converse com alguém de confiança na escola, como a
+        professora ou a coordenação. O <strong>Ligue 180</strong> (Central de Atendimento à Mulher) é
+        gratuito, funciona 24 horas e também orienta quem quer ajudar outra pessoa. Em emergência, ligue
+        <strong> 190</strong>.
+      </p>
+    </aside>
   );
 }

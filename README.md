@@ -266,3 +266,9 @@ Principais mudanças:
 - Ícones dos bairros em `src/components/DistrictIcon.tsx` (biblioteca `lucide-react`),
   cada um repetindo o símbolo do prédio no mapa.
 - Cartão do pino maior (nome 16px, descrição 14px) e abrindo para a esquerda nos bairros da direita.
+
+## Missão Charge com casos — v17.2
+- O conteúdo da missão fica em `src/data/chargeCases.ts`; a tela funciona com qualquer caso.
+- Caso 1 "Pesquisando juntos?" (original), Caso 2 "Ninguém mete a colher", Caso 3 "Ele só é cuidadoso".
+- Concluir qualquer caso restaura o distrito; cada caso concluído dá o seu selo.
+- Casos sobre violência mostram um aviso de apoio (Ligue 180 / 190).
