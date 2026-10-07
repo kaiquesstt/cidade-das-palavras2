@@ -31,6 +31,7 @@ const badges: Array<{ name: string; desc: string } & BadgeIcon> = [
   { name: "Voz do leitor", desc: "Restaurou a Central do Leitor dialogando com uma publicação de forma pública, argumentada e respeitosa.", district: "carta" },
   { name: "Mestre da entrelinha", desc: "Restaurou a Estação Miniconto produzindo narrativa concisa, com movimento e espaço para inferência.", district: "miniconto" },
   { name: "Mestre das lentes", desc: "Restaurou o Laboratório das Lentes reconhecendo e produzindo diferentes efeitos de sentido.", district: "figuras" },
+  { name: "Corrente quebrada", desc: "Restaurou a Torre da Rede usando potências para mostrar como uma escolha muda o tamanho de uma rede.", district: "rede" },
   { name: "Cidade restaurada", desc: "Concluiu todos os distritos abertos da Cidade das Palavras.", icon: Building2 },
   { name: "Mestre dos contrastes", desc: "Diferenciou conceitos próximos sem depender apenas de memorização.", icon: ArrowLeftRight },
   { name: "Autor da cidade", desc: "Complete uma produção própria.", icon: PenLine },

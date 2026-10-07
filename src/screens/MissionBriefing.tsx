@@ -58,8 +58,8 @@ const missionInfo: Record<
       "Compreender anáfora, eufemismo, metáfora, comparação e personificação pelo efeito de sentido, justificar classificações e criar exemplos autorais."
   },
   rede: {
-    view: null,
-    action: "Em construção",
+    view: "redeMission",
+    action: "Entrar na Torre da Rede",
     focus:
       "Simular como uma mensagem se espalha, comparar repassar, ignorar e denunciar, e representar o alcance com potências e gráficos."
   },

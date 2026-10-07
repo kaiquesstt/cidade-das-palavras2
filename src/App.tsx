@@ -1,4 +1,5 @@
 
+import type { ViewKey } from "./types";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { BottomNav } from "./components/BottomNav";
@@ -12,6 +13,7 @@ import { OpinionMissionScreen } from "./screens/OpinionMissionScreen";
 import { ReaderLetterMissionScreen } from "./screens/ReaderLetterMissionScreen";
 import { MinicontoMissionScreen } from "./screens/MinicontoMissionScreen";
 import { FiguresMissionScreen } from "./screens/FiguresMissionScreen";
+import { RedeMissionScreen } from "./screens/RedeMissionScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { MapScreen } from "./screens/MapScreen";
 import { MissionBriefing } from "./screens/MissionBriefing";
@@ -19,6 +21,20 @@ import { MissionsScreen } from "./screens/MissionsScreen";
 import { NotebookScreen } from "./screens/NotebookScreen";
 import { ProgressScreen } from "./screens/ProgressScreen";
 import { useGameStore } from "./store/useGameStore";
+
+/** Telas de missão ocupam a tela toda, sem a barra de navegação. */
+const fullScreenViews = new Set<ViewKey>([
+  "mission",
+  "chargeMission",
+  "fableMission",
+  "legendMission",
+  "statuteMission",
+  "opinionMission",
+  "readerLetterMission",
+  "minicontoMission",
+  "figuresMission",
+  "redeMission"
+]);
 
 function CurrentScreen() {
   const activeView = useGameStore((s) => s.activeView);
@@ -52,6 +68,8 @@ function CurrentScreen() {
       return <MinicontoMissionScreen />;
     case "figuresMission":
       return <FiguresMissionScreen />;
+    case "redeMission":
+      return <RedeMissionScreen />;
     case "home":
     default:
       return <HomeScreen />;
@@ -91,7 +109,7 @@ export default function App() {
       <div id="game-content" className="app-view" key={activeView} tabIndex={-1}>
         <CurrentScreen />
       </div>
-      {activeView !== "mission" && activeView !== "chargeMission" && activeView !== "fableMission" && activeView !== "legendMission" && activeView !== "statuteMission" && activeView !== "opinionMission" && activeView !== "readerLetterMission" && activeView !== "minicontoMission" && activeView !== "figuresMission" && <BottomNav />}
+      {!fullScreenViews.has(activeView) && <BottomNav />}
     </div>
   );
 }

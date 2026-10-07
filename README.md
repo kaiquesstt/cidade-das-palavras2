@@ -287,3 +287,10 @@ Principais mudanças:
 - As faixas do topo das missões usam cenas novas no estilo do mapa (`src/assets/*-district.webp`).
 - A Lenda ganhou imagem própria (`legend-district.webp`); a Charge ganhou faixa na tela de casos.
 - Enfeites antigos sobre as faixas (§, ✦, ✉, 07, lua, prisma, chuva) foram retirados.
+
+## Missão A Rede — v18
+- `src/screens/RedeMissionScreen.tsx`: mensagem fictícia expondo a "Bia"; simulador em árvore
+  (×3 por rodada) com previsão; escolha repassar/ignorar/denunciar; comparação soma × multiplicação
+  (potências); calculadora de rodadas (×2); campanha "Não repasse".
+- Selo "Corrente quebrada". O bairro Rede passa a contar no progresso.
+- Aviso de apoio compartilhado em `src/components/SupportNote.tsx`.

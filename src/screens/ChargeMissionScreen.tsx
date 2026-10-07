@@ -5,6 +5,7 @@ import teacherImage from "../assets/teacher-guide.webp";
 import chargeBanner from "../assets/charge-district.webp";
 import { chargeCases } from "../data/chargeCases";
 import { shuffle } from "../utils/shuffle";
+import { SupportNote } from "../components/SupportNote";
 import { useGameStore } from "../store/useGameStore";
 
 type Stage = "investigate" | "classify" | "justify" | "contrast" | "apply" | "produce" | "complete";
@@ -629,17 +630,3 @@ export function ChargeMissionScreen() {
   );
 }
 
-/** Aviso de apoio exibido nos casos que tratam de violência. */
-function SupportNote() {
-  return (
-    <aside className="charge-support-note" aria-label="Onde buscar ajuda">
-      <b>Se você ou alguém próximo vive algo parecido</b>
-      <p>
-        Você não precisa lidar com isso sozinho(a). Converse com alguém de confiança na escola, como a
-        professora ou a coordenação. O <strong>Ligue 180</strong> (Central de Atendimento à Mulher) é
-        gratuito, funciona 24 horas e também orienta quem quer ajudar outra pessoa. Em emergência, ligue
-        <strong> 190</strong>.
-      </p>
-    </aside>
-  );
-}

@@ -25,7 +25,8 @@ export type ViewKey =
   | "opinionMission"
   | "readerLetterMission"
   | "minicontoMission"
-  | "figuresMission";
+  | "figuresMission"
+  | "redeMission";
 
 export type MasteryStage = "recognize" | "explain" | "apply" | "produce";
 

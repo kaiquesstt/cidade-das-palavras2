@@ -117,8 +117,7 @@ export const districts: District[] = [
     purpose: "Perceber, com matemática, como uma mensagem se espalha e quanto pesa cada escolha.",
     clue: "Se cada pessoa repassa para três, o alcance se multiplica a cada rodada.",
     contrast: "Crescimento exponencial não é soma: a cada rodada o alcance não aumenta um pouco, ele se multiplica.",
-    icon: "⌁",
-    hasMission: false
+    icon: "⌁"
   },
   {
     key: "dados",
