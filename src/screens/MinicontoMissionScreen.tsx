@@ -480,7 +480,6 @@ export function MinicontoMissionScreen() {
           <section className="miniconto-banner">
             <img src={minicontoImage} alt="" />
             <div className="miniconto-banner-overlay" />
-            <div className="miniconto-rain" aria-hidden="true" />
             <div className="miniconto-banner-copy">
               <span>ARQUIVO NARRATIVO 07</span>
               <h2>A estação está cheia de histórias que perderam palavras.</h2>
@@ -489,7 +488,6 @@ export function MinicontoMissionScreen() {
                 movimento, a lacuna e o efeito da narrativa.
               </p>
             </div>
-            <div className="miniconto-ticket" aria-hidden="true">07</div>
           </section>
 
           <section className="miniconto-reading">

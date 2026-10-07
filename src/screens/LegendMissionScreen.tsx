@@ -2,7 +2,7 @@
 import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
-import cityMap from "../assets/city-map.webp";
+import legendImage from "../assets/legend-district.webp";
 import { useGameStore } from "../store/useGameStore";
 import { shuffle } from "../utils/shuffle";
 
@@ -415,9 +415,8 @@ export function LegendMissionScreen() {
 
         <section className="legend-main">
           <section className="legend-village-banner">
-            <img src={cityMap} alt="" />
+            <img src={legendImage} alt="" />
             <div className="legend-village-overlay" />
-            <div className="legend-moon" aria-hidden="true" />
             <div className="legend-fog fog-a" aria-hidden="true" />
             <div className="legend-fog fog-b" aria-hidden="true" />
             <div className="legend-village-copy">

@@ -5690,3 +5690,74 @@ textarea{max-width:100%}
 .bottom-nav .nav-icon { display: grid; margin: 0 auto 4px; }
 .bottom-nav button { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .achievement-icon { flex: 0 0 48px; width: 48px; height: 48px; border-radius: 14px; }
+
+/* ===== Faixas das missões v17.5: cenas novas no estilo do mapa ===== */
+.fable-forest-banner > img,
+.legend-village-banner > img,
+.statute-chamber-banner > img,
+.opinion-newsroom-banner > img,
+.reader-letter-banner > img,
+.miniconto-banner > img,
+.figures-banner > img,
+.charge-district-banner > img {
+  filter: saturate(1.05) brightness(.92);
+  transform: none;
+}
+/* enquadramento vertical de cada cena (assunto principal na faixa visível) */
+.fable-forest-banner > img      { object-position: 50% 62%; }
+.legend-village-banner > img    { object-position: 50% 34%; }
+.statute-chamber-banner > img   { object-position: 50% 22%; }
+.opinion-newsroom-banner > img  { object-position: 50% 30%; }
+.reader-letter-banner > img     { object-position: 50% 26%; }
+.miniconto-banner > img         { object-position: 50% 44%; }
+.figures-banner > img           { object-position: 50% 38%; }
+.charge-district-banner > img   { object-position: 50% 34%; }
+
+/* Faixa nova da Charge (tela de escolha dos casos) */
+.charge-district-banner {
+  position: relative;
+  width: min(1220px, calc(100% - 36px));
+  min-height: 220px;
+  margin: 18px auto 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 86, 86, .3);
+  border-radius: 22px;
+  color: #fff;
+  background: #3a1216;
+}
+.charge-district-banner > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.charge-district-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(30, 8, 12, .94), rgba(30, 8, 12, .6) 50%, rgba(30, 8, 12, .08));
+}
+.charge-district-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+  padding: 30px;
+}
+.charge-district-copy > span { color: #ffb4a8; font-size: var(--fs-xs); font-weight: 900; letter-spacing: .14em; }
+.charge-district-copy h2 { margin: 8px 0 9px; font-size: var(--fs-xl); line-height: 1.1; }
+.charge-district-copy p { margin: 0; color: #fde7e4; font-size: var(--fs-base); line-height: 1.5; }
+/* Escurecimento só atrás do texto; o lado direito mostra a cena */
+.fable-forest-overlay,
+.legend-village-overlay,
+.statute-chamber-overlay,
+.opinion-newsroom-overlay,
+.reader-letter-banner-overlay,
+.miniconto-banner-overlay,
+.figures-banner-overlay {
+  background: linear-gradient(90deg, rgba(8, 14, 24, .9), rgba(8, 14, 24, .58) 46%, rgba(8, 14, 24, .06) 78%) !important;
+}
+.fable-forest-banner > img      { object-position: 50% 54%; }
+.statute-chamber-banner > img   { object-position: 50% 10%; }
+.opinion-newsroom-banner > img  { object-position: 50% 20%; }
+.reader-letter-banner > img     { object-position: 50% 10%; }
+.miniconto-banner > img         { object-position: 50% 32%; }

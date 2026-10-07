@@ -600,7 +600,6 @@ export function OpinionMissionScreen() {
                 com razões, evidências e resposta a objeções.
               </p>
             </div>
-            <div className="opinion-megaphone" aria-hidden="true">✦</div>
           </section>
 
           <section className="opinion-article">

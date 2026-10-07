@@ -704,7 +704,6 @@ export function FiguresMissionScreen() {
                 uma figura pelo que ela faz — não apenas pelo nome.
               </p>
             </div>
-            <div className="figures-prism" aria-hidden="true">✺</div>
           </section>
 
           <section className="figures-task">

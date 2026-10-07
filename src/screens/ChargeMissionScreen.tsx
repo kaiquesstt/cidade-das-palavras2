@@ -2,6 +2,7 @@
 import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
+import chargeBanner from "../assets/charge-district.webp";
 import { chargeCases } from "../data/chargeCases";
 import { shuffle } from "../utils/shuffle";
 import { useGameStore } from "../store/useGameStore";
@@ -174,6 +175,19 @@ export function ChargeMissionScreen() {
             ← Voltar ao mapa
           </button>
         </header>
+
+        <section className="charge-district-banner">
+          <img src={chargeBanner} alt="" />
+          <div className="charge-district-overlay" />
+          <div className="charge-district-copy">
+            <span>ARQUIVO CRÍTICO 01</span>
+            <h2>O telão da cidade mostra cenas que pedem um olhar crítico.</h2>
+            <p>
+              Escolha um caso, leia texto e imagem juntos e descubra o que cada charge está
+              criticando por trás do humor.
+            </p>
+          </div>
+        </section>
 
         <div className="charge-case-grid">
           {chargeCases.map((item) => {

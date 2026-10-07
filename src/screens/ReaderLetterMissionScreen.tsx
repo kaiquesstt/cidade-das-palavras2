@@ -582,7 +582,6 @@ export function ReaderLetterMissionScreen() {
                 leitor transforma leitura em participação pública.
               </p>
             </div>
-            <div className="reader-letter-envelope" aria-hidden="true">✉</div>
           </section>
 
           <section className="reader-letter-dialogue">

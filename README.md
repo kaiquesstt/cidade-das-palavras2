@@ -282,3 +282,8 @@ Principais mudanças:
 - Navegação, topo, configurações, painel da missão, mapa, professora-guia, avisos de XP,
   selos de conquista e lentes das Figuras usam `lucide-react`.
 - Selos de bairro reutilizam o ícone do bairro (`DistrictIcon`).
+
+## Faixas das missões — v17.5
+- As faixas do topo das missões usam cenas novas no estilo do mapa (`src/assets/*-district.webp`).
+- A Lenda ganhou imagem própria (`legend-district.webp`); a Charge ganhou faixa na tela de casos.
+- Enfeites antigos sobre as faixas (§, ✦, ✉, 07, lua, prisma, chuva) foram retirados.

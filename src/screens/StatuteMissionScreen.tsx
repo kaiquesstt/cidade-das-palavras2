@@ -514,7 +514,6 @@ export function StatuteMissionScreen() {
                 proibições e responsabilidades de toda uma comunidade.
               </p>
             </div>
-            <div className="statute-seal" aria-hidden="true">§</div>
           </section>
 
           <section className="statute-document">
