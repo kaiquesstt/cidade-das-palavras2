@@ -130,8 +130,7 @@ export const districts: District[] = [
     purpose: "Coletar, organizar e interpretar dados para compreender um problema real.",
     clue: "Pergunte sempre: de onde vem o dado, quantas pessoas foram ouvidas e o que o gráfico deixa de mostrar?",
     contrast: "Um número isolado não é argumento: precisa de fonte, contexto e comparação.",
-    icon: "▥",
-    hasMission: false
+    icon: "▥"
   }
 ];
 

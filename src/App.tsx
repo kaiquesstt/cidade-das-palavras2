@@ -14,6 +14,7 @@ import { ReaderLetterMissionScreen } from "./screens/ReaderLetterMissionScreen";
 import { MinicontoMissionScreen } from "./screens/MinicontoMissionScreen";
 import { FiguresMissionScreen } from "./screens/FiguresMissionScreen";
 import { RedeMissionScreen } from "./screens/RedeMissionScreen";
+import { DadosMissionScreen } from "./screens/DadosMissionScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { MapScreen } from "./screens/MapScreen";
 import { MissionBriefing } from "./screens/MissionBriefing";
@@ -33,7 +34,8 @@ const fullScreenViews = new Set<ViewKey>([
   "readerLetterMission",
   "minicontoMission",
   "figuresMission",
-  "redeMission"
+  "redeMission",
+  "dadosMission"
 ]);
 
 function CurrentScreen() {
@@ -70,6 +72,8 @@ function CurrentScreen() {
       return <FiguresMissionScreen />;
     case "redeMission":
       return <RedeMissionScreen />;
+    case "dadosMission":
+      return <DadosMissionScreen />;
     case "home":
     default:
       return <HomeScreen />;

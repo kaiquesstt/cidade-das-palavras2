@@ -6,6 +6,7 @@ import figuresImage from "../assets/figures-district.webp";
 import { useGameStore } from "../store/useGameStore";
 import { shuffle } from "../utils/shuffle";
 import { playableDistricts } from "../data/districts";
+import { SupportNote } from "../components/SupportNote";
 
 type Stage =
   | "discover"
@@ -437,11 +438,346 @@ const prompts: Record<FigureKey, string[]> = {
   ]
 };
 
+
+/* ===================== CASO 2: palavras que ferem, palavras que cuidam ===================== */
+
+const figuresCase2: typeof figures = {
+  anafora: {
+    ...figures.anafora,
+    example: "Não é ciúme. Não é cuidado. Não é amor. É controle.",
+    why: "“Não é” se repete no início de três frases. A repetição cria ritmo, como num cartaz de campanha, e prepara a força da última frase."
+  },
+  eufemismo: {
+    ...figures.eufemismo,
+    example: "Depois de humilhar a colega na frente da turma, ele disse: “Foi só uma brincadeira.”",
+    why: "“Só uma brincadeira” suaviza uma humilhação. Aqui o eufemismo não protege quem sofreu: ele esconde a gravidade do que aconteceu."
+  },
+  metafora: {
+    ...figures.metafora,
+    example: "Aquele relacionamento era uma gaiola.",
+    why: "O relacionamento não é literalmente uma gaiola. A imagem mostra a falta de liberdade sem usar “como”."
+  },
+  comparacao: {
+    ...figures.comparacao,
+    example: "As mensagens dele chegavam como um alarme que nunca desligava.",
+    why: "O “como” deixa explícita a semelhança entre as mensagens e um alarme: insistentes e impossíveis de ignorar."
+  },
+  personificacao: {
+    ...figures.personificacao,
+    example: "O celular vigiava cada passo dela.",
+    why: "“Vigiar” é uma ação humana atribuída ao celular. A personificação mostra como o controle parece estar em toda parte."
+  }
+};
+
+const classifyCases2: typeof classifyCases = [
+  {
+    id: "c1",
+    text: "Respeito na escola. Respeito em casa. Respeito na internet.",
+    answer: "anafora",
+    note: "“Respeito” abre cada segmento, criando ritmo e insistência, como num slogan."
+  },
+  {
+    id: "c2",
+    text: "Para o vizinho, os gritos de todas as noites eram “coisa de casal”.",
+    answer: "eufemismo",
+    note: "“Coisa de casal” suaviza algo grave e faz a violência parecer normal e privada."
+  },
+  {
+    id: "c3",
+    text: "Palavras gentis são pontes.",
+    answer: "metafora",
+    note: "Palavras e pontes são aproximadas por uma imagem implícita, sem conector comparativo."
+  },
+  {
+    id: "c4",
+    text: "O comentário maldoso se espalhou como fogo no mato seco.",
+    answer: "comparacao",
+    note: "O “como” torna explícita a semelhança entre o comentário e o fogo que se espalha."
+  },
+  {
+    id: "c5",
+    text: "A internet nunca esquece uma foto.",
+    answer: "personificacao",
+    note: "A internet recebe uma capacidade humana: lembrar ou esquecer."
+  }
+];
+
+const whyCases2: typeof whyCases = [
+  {
+    id: "w1",
+    figure: "anafora",
+    text: "“Eu posso dizer não. Eu posso mudar de ideia. Eu posso ir embora.”",
+    options: [
+      {
+        id: "a",
+        label: "Porque “Eu posso” se repete de propósito no início das frases, dando ritmo e força à ideia de direito.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "Porque qualquer palavra repetida duas vezes em um texto já é anáfora.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "w2",
+    figure: "eufemismo",
+    text: "“Ele só tem o gênio forte.” (dito sobre alguém que grita e ameaça)",
+    options: [
+      {
+        id: "a",
+        label: "Porque a expressão suaviza um comportamento agressivo, fazendo parecer apenas um jeito de ser.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "Porque toda frase curta sobre uma pessoa é eufemismo.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "w3",
+    figure: "metafora",
+    text: "“Ciúme é corrente, não é abraço.”",
+    options: [
+      {
+        id: "a",
+        label: "Porque aproxima ciúme e corrente por uma imagem, sem usar “como”.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "Porque a frase usa o verbo “ser”, e toda frase com esse verbo é metáfora.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "w4",
+    figure: "comparacao",
+    text: "“Ela se sentia vigiada como numa vitrine.”",
+    options: [
+      {
+        id: "a",
+        label: "Porque a semelhança é apresentada de forma explícita pelo “como”.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "Porque comparação e metáfora são a mesma figura e sempre podem ser trocadas.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "w5",
+    figure: "personificacao",
+    text: "“O silêncio da casa pedia socorro.”",
+    options: [
+      {
+        id: "a",
+        label: "Porque o silêncio recebe uma ação humana: pedir socorro.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "Porque qualquer frase sobre uma casa é personificação.",
+        correct: false
+      }
+    ]
+  }
+];
+
+const contrastCases2: typeof contrastCases = [
+  {
+    id: "met-comp",
+    title: "Metáfora × Comparação",
+    left: "O ciúme dele era uma corrente.",
+    right: "O ciúme dele pesava como uma corrente.",
+    question: "Qual diferença explica melhor o efeito das duas frases?",
+    options: [
+      {
+        id: "a",
+        label: "Na primeira, a relação é implícita; na segunda, o “como” deixa a comparação explícita.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "A primeira é literal; a segunda é figurada.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "euf-clara",
+    title: "Eufemismo × Dizer com clareza",
+    left: "Foi só uma brincadeira.",
+    right: "Foi uma humilhação.",
+    question: "Depois de alguém humilhar uma colega, qual é o efeito da primeira frase?",
+    options: [
+      {
+        id: "a",
+        label: "Ela suaviza e esconde a gravidade do que aconteceu; a segunda dá o nome certo à situação.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "As duas dizem a mesma coisa, com o mesmo efeito.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "ana-rep",
+    title: "Anáfora × Repetição qualquer",
+    left: "Não é ciúme. Não é cuidado. Não é amor.",
+    right: "Não é fácil falar de ciúme.",
+    question: "O que torna a primeira frase anafórica?",
+    options: [
+      {
+        id: "a",
+        label: "“Não é” se repete de forma organizada no início de frases seguidas, criando um padrão.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "Basta a expressão “não é” aparecer uma vez para ser anáfora.",
+        correct: false
+      }
+    ]
+  },
+  {
+    id: "pers-lit",
+    title: "Personificação × Ação literal",
+    left: "O celular tocou a noite inteira.",
+    right: "O celular a vigiou a noite inteira.",
+    question: "Qual frase constrói personificação?",
+    options: [
+      {
+        id: "a",
+        label: "A segunda, porque dá ao celular a ação humana de vigiar. Tocar é algo que celulares realmente fazem.",
+        correct: true
+      },
+      {
+        id: "b",
+        label: "As duas, porque todo verbo de ação transforma um objeto em pessoa.",
+        correct: false
+      }
+    ]
+  }
+];
+
+const applyCases2: typeof applyCases = [
+  {
+    id: "a1",
+    mission: "Criar o slogan de uma campanha contra a violência na escola.",
+    target: "anafora",
+    context: "Você quer repetir uma estrutura no início das frases para a mensagem ficar na memória."
+  },
+  {
+    id: "a2",
+    mission: "Perceber o que alguém faz ao chamar uma agressão de “briguinha”.",
+    target: "eufemismo",
+    context: "A fala suaviza algo grave e pode esconder o problema."
+  },
+  {
+    id: "a3",
+    mission: "Mostrar a falta de liberdade num relacionamento com uma imagem forte, sem usar “como”.",
+    target: "metafora",
+    context: "Você quer que o leitor entenda a situação por meio de outra imagem, de forma implícita."
+  },
+  {
+    id: "a4",
+    mission: "Explicar como um boato se espalha, deixando a semelhança bem clara.",
+    target: "comparacao",
+    context: "A relação entre os dois elementos precisa aparecer marcada, com “como” ou “parece”."
+  },
+  {
+    id: "a5",
+    mission: "Fazer a internet ou o celular agirem como pessoas num poema.",
+    target: "personificacao",
+    context: "Você quer dar ações ou sentimentos humanos a algo que não é gente."
+  }
+];
+
+const prompts2: typeof prompts = {
+  anafora: [
+    "Escreva três frases que comecem com “Respeito é” para um cartaz da escola.",
+    "Crie uma fala de apoio a uma colega repetindo “Você não está sozinha” no início das frases."
+  ],
+  eufemismo: [
+    "Escreva uma fala que alguém usa para diminuir uma agressão e, ao lado, diga com clareza o que aconteceu.",
+    "Escreva com delicadeza um convite para uma colega procurar ajuda, sem esconder o problema."
+  ],
+  metafora: [
+    "Transforme o respeito em uma imagem, sem usar “como”.",
+    "Crie uma metáfora para uma amizade que apoia."
+  ],
+  comparacao: [
+    "Compare um comentário que machuca com outra coisa, usando “como”.",
+    "Compare uma palavra de apoio com algo que traz alívio."
+  ],
+  personificacao: [
+    "Faça o celular ou a internet agir como uma pessoa.",
+    "Dê um sentimento à escola num dia de campanha pelo respeito."
+  ]
+};
+
+interface FiguresCase {
+  id: string;
+  number: number;
+  title: string;
+  subtitle: string;
+  badge: string;
+  sensitive: boolean;
+  figures: typeof figures;
+  classifyCases: typeof classifyCases;
+  whyCases: typeof whyCases;
+  contrastCases: typeof contrastCases;
+  applyCases: typeof applyCases;
+  prompts: typeof prompts;
+}
+
+const figuresCases: FiguresCase[] = [
+  {
+    id: "lentes",
+    number: 1,
+    title: "Efeitos em ação",
+    subtitle: "Exemplos do dia a dia da cidade",
+    badge: "Mestre das lentes",
+    sensitive: false,
+    figures,
+    classifyCases,
+    whyCases,
+    contrastCases,
+    applyCases,
+    prompts
+  },
+  {
+    id: "palavras-que-cuidam",
+    number: 2,
+    title: "Palavras que ferem, palavras que cuidam",
+    subtitle: "Respeito, violência disfarçada e apoio",
+    badge: "Palavra que cuida",
+    sensitive: true,
+    figures: figuresCase2,
+    classifyCases: classifyCases2,
+    whyCases: whyCases2,
+    contrastCases: contrastCases2,
+    applyCases: applyCases2,
+    prompts: prompts2
+  }
+];
+
 function blankCard(): CreationCard {
   return { figure: "", text: "", reviewed: false };
 }
 
-export function FiguresMissionScreen() {
+function FiguresCaseMission({ c, onSwitchCase }: { c: FiguresCase; onSwitchCase: () => void }) {
+  // O conteúdo vem do caso escolhido; os nomes são os mesmos usados pela lógica abaixo.
+  const { figures, classifyCases, whyCases, contrastCases, applyCases, prompts } = c;
   // Embaralha as opções de cada pergunta a cada vez que a missão abre.
   const shuffledWhyCases = useMemo(
     () => whyCases.map((item) => ({ ...item, options: shuffle(item.options) })),
@@ -582,7 +918,7 @@ export function FiguresMissionScreen() {
   function finishProduction() {
     if (!productionReady) return;
     award("produce", "Produzir concluído");
-    addAchievement("Mestre das lentes");
+    addAchievement(c.badge);
     addAchievement("Autor da cidade");
 
     const otherDistrictsComplete = playableDistricts
@@ -608,7 +944,7 @@ export function FiguresMissionScreen() {
       <header className="figures-header">
         <div className="figures-header-title">
           <span className="eyebrow">LABORATÓRIO DAS LENTES</span>
-          <h1>Figuras de linguagem: efeitos em ação</h1>
+          <h1>Caso {c.number}: {c.title}</h1>
           <small>Anáfora · eufemismo · metáfora · comparação · personificação</small>
         </div>
 
@@ -648,13 +984,18 @@ export function FiguresMissionScreen() {
           </button>
         </div>
 
-        <button
-          type="button"
-          className="secondary-action"
-          onClick={() => setActiveView("map")}
-        >
-          ← Voltar ao mapa
-        </button>
+        <div className="charge-header-actions">
+          <button type="button" className="secondary-action" onClick={onSwitchCase}>
+            Trocar de caso
+          </button>
+          <button
+            type="button"
+            className="secondary-action"
+            onClick={() => setActiveView("map")}
+          >
+            ← Voltar ao mapa
+          </button>
+        </div>
       </header>
 
       <div className="figures-layout">
@@ -709,6 +1050,7 @@ export function FiguresMissionScreen() {
           <section className="figures-task">
             {stage === "discover" && (
               <>
+                {c.sensitive && <SupportNote />}
                 <div className="figures-task-heading">
                   <span>01</span>
                   <div>
@@ -1293,16 +1635,25 @@ export function FiguresMissionScreen() {
                 </div>
 
                 <div className="figures-final-message">
-                  <span>ARQUIVOS PRINCIPAIS DA CIDADE</span>
-                  <h3>8 distritos agora possuem missões completas.</h3>
+                  <span>CASO {c.number} CONCLUÍDO · SELO {c.badge.toUpperCase()}</span>
+                  <h3>
+                    {c.sensitive
+                      ? "As palavras também podem cuidar."
+                      : "Você escolheu cada figura pelo efeito que ela produz."}
+                  </h3>
                   <p>
-                    O próximo ciclo do projeto pode deixar de ser “construir
-                    conteúdo” e passar para <b>polimento, testes com alunos,
-                    acessibilidade e balanceamento da experiência</b>.
+                    {c.sensitive
+                      ? "Você percebeu como a linguagem pode disfarçar uma violência, como em “foi só uma brincadeira”, e também como pode apoiar e dar nome ao que acontece."
+                      : "Anáfora, eufemismo, metáfora, comparação e personificação agora são ferramentas que você sabe reconhecer e usar."}
                   </p>
                 </div>
 
+                {c.sensitive && <SupportNote />}
+
                 <div className="figures-final-actions">
+                  <button type="button" className="secondary-action" onClick={onSwitchCase}>
+                    Investigar outro caso
+                  </button>
                   <button
                     type="button"
                     className="secondary-action"
@@ -1323,6 +1674,75 @@ export function FiguresMissionScreen() {
           </section>
         </section>
       </div>
+    </main>
+  );
+}
+
+/** Entrada da missão: escolha do caso. Trocar de caso reinicia a missão do zero. */
+export function FiguresMissionScreen() {
+  const setActiveView = useGameStore((s) => s.setActiveView);
+  const achievements = useGameStore((s) => s.achievements);
+  const districtProgress = useGameStore((s) => s.progress.figuras);
+  const [caseId, setCaseId] = useState<string | null>(null);
+  const [round, setRound] = useState(0);
+
+  const active = figuresCases.find((item) => item.id === caseId);
+  if (active) {
+    return <FiguresCaseMission key={`${active.id}-${round}`} c={active} onSwitchCase={() => setCaseId(null)} />;
+  }
+
+  return (
+    <main className="figures-page">
+      <header className="figures-header">
+        <div className="figures-header-title">
+          <span className="eyebrow">LABORATÓRIO DAS LENTES</span>
+          <h1>Escolha um caso</h1>
+          <small>Concluir qualquer caso restaura o distrito. Cada caso extra rende um selo próprio.</small>
+        </div>
+        <button type="button" className="secondary-action" onClick={() => setActiveView("map")}>
+          ← Voltar ao mapa
+        </button>
+      </header>
+
+      <section className="charge-district-banner figures-picker-banner">
+        <img src={figuresImage} alt="" />
+        <div className="charge-district-overlay" />
+        <div className="charge-district-copy">
+          <span>ARQUIVO DE SENTIDO 08</span>
+          <h2>Palavras podem ferir ou cuidar.</h2>
+          <p>Cada figura de linguagem produz um efeito. Escolha um caso e descubra como esses efeitos são construídos.</p>
+        </div>
+      </section>
+
+      <div className="figures-case-grid">
+        {figuresCases.map((item) => {
+          const done = achievements.includes(item.badge);
+          return (
+            <button
+              type="button"
+              key={item.id}
+              className={`figures-case-card ${done ? "done" : ""}`}
+              onClick={() => {
+                setCaseId(item.id);
+                setRound((value) => value + 1);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            >
+              <span className="figures-case-number">Caso {item.number}</span>
+              <strong>{item.title}</strong>
+              <span>{item.subtitle}</span>
+              <p>“{item.figures.metafora.example}”</p>
+              <em>{done ? `✓ Concluído · selo ${item.badge}` : "Ainda não investigado"}</em>
+            </button>
+          );
+        })}
+      </div>
+
+      {districtProgress === 100 && (
+        <p className="charge-case-note">
+          O distrito já está restaurado. O outro caso serve para aprofundar a leitura das figuras.
+        </p>
+      )}
     </main>
   );
 }

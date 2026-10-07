@@ -294,3 +294,16 @@ Principais mudanças:
   (potências); calculadora de rodadas (×2); campanha "Não repasse".
 - Selo "Corrente quebrada". O bairro Rede passa a contar no progresso.
 - Aviso de apoio compartilhado em `src/components/SupportNote.tsx`.
+
+## Missão Dados — v18.1
+- `src/screens/DadosMissionScreen.tsx`: pesquisa simulada (30 respostas, "Ciúme é prova de amor?");
+  contar papéis e montar tabela de frequência; porcentagem com grade de 10 colunas × 3 (cada coluna = 10%);
+  montar gráfico de barras; gráfico enganoso (eixo começando em 15%) e generalização indevida;
+  usar o dado como argumento num mural.
+- Selo "Leitor de números". Todos os 10 bairros agora têm missão.
+
+## Figuras de linguagem com casos — v18.2
+- Caso 1 "Efeitos em ação" (conteúdo original) e Caso 2 "Palavras que ferem, palavras que cuidam"
+  (eufemismos que disfarçam violência, anáfora de campanha, metáforas e personificações sobre controle e apoio).
+- A tela de cada caso é remontada ao trocar de caso (estado zerado). Selo do Caso 2: "Palavra que cuida".
+- Tela final: removida a nota de desenvolvimento que aparecia para o aluno.

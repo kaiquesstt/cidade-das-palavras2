@@ -64,8 +64,8 @@ const missionInfo: Record<
       "Simular como uma mensagem se espalha, comparar repassar, ignorar e denunciar, e representar o alcance com potências e gráficos."
   },
   dados: {
-    view: null,
-    action: "Em construção",
+    view: "dadosMission",
+    action: "Entrar no Observatório dos Dados",
     focus:
       "Planejar uma pesquisa, tabular respostas, calcular porcentagens, construir gráficos e usar os resultados como evidência em textos argumentativos."
   }
