@@ -1,14 +1,15 @@
 
+import { ChartNoAxesColumn, House, ListChecks, Map as MapIcon, NotebookPen, Trophy, type LucideIcon } from "lucide-react";
 import type { ViewKey } from "../types";
 import { useGameStore } from "../store/useGameStore";
 
-const items: Array<{ key: ViewKey; icon: string; label: string }> = [
-  { key: "home", icon: "⌂", label: "Início" },
-  { key: "map", icon: "◇", label: "Mapa" },
-  { key: "missions", icon: "✓", label: "Missões" },
-  { key: "achievements", icon: "★", label: "Conquistas" },
-  { key: "notebook", icon: "▣", label: "Caderno" },
-  { key: "progress", icon: "▥", label: "Progresso" }
+const items: Array<{ key: ViewKey; icon: LucideIcon; label: string }> = [
+  { key: "home", icon: House, label: "Início" },
+  { key: "map", icon: MapIcon, label: "Mapa" },
+  { key: "missions", icon: ListChecks, label: "Missões" },
+  { key: "achievements", icon: Trophy, label: "Conquistas" },
+  { key: "notebook", icon: NotebookPen, label: "Caderno" },
+  { key: "progress", icon: ChartNoAxesColumn, label: "Progresso" }
 ];
 
 export function BottomNav() {
@@ -24,7 +25,9 @@ export function BottomNav() {
           className={activeView === item.key ? "active" : ""}
           onClick={() => setActiveView(item.key)}
         >
-          <span className="nav-icon" aria-hidden="true">{item.icon}</span>
+          <span className="nav-icon" aria-hidden="true">
+            <item.icon size={22} strokeWidth={2.1} />
+          </span>
           <span>{item.label}</span>
         </button>
       ))}

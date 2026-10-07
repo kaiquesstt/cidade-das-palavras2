@@ -1,4 +1,5 @@
 
+import { Maximize, Minimize, Settings, Sparkles, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useGameStore } from "../store/useGameStore";
 import { SettingsDialog } from "./SettingsDialog";
@@ -47,7 +48,9 @@ export function TopHUD() {
         </button>
 
         <div className="player-hud" aria-label="Status do jogador">
-          <div className="avatar" aria-hidden="true">✦</div>
+          <div className="avatar" aria-hidden="true">
+            <Sparkles size={20} />
+          </div>
           <div className="player-data">
             <span>{playerName.toUpperCase()}</span>
             <b>Nível {level}</b>
@@ -65,7 +68,7 @@ export function TopHUD() {
             aria-label={`${achievements.length} conquistas desbloqueadas`}
             onClick={() => setActiveView("achievements")}
           >
-            ★ {achievements.length}
+            <Star size={17} fill="currentColor" aria-hidden="true" /> {achievements.length}
           </button>
 
           <button
@@ -75,7 +78,7 @@ export function TopHUD() {
             aria-label={isFullscreen ? "Sair da tela cheia" : "Entrar em tela cheia"}
             title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
           >
-            {isFullscreen ? "↙" : "⛶"}
+            {isFullscreen ? <Minimize size={19} aria-hidden="true" /> : <Maximize size={19} aria-hidden="true" />}
           </button>
 
           <button
@@ -85,7 +88,7 @@ export function TopHUD() {
             aria-label="Abrir configurações e acessibilidade"
             title="Configurações e acessibilidade"
           >
-            ⚙
+            <Settings size={19} aria-hidden="true" />
           </button>
         </div>
       </header>

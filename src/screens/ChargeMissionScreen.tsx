@@ -1,7 +1,9 @@
 
+import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
 import { chargeCases } from "../data/chargeCases";
+import { shuffle } from "../utils/shuffle";
 import { useGameStore } from "../store/useGameStore";
 
 type Stage = "investigate" | "classify" | "justify" | "contrast" | "apply" | "produce" | "complete";
@@ -50,6 +52,19 @@ export function ChargeMissionScreen() {
   const c = activeCase ?? chargeCases[0];
   const isCaseDone = (badge: string) => achievements.includes(badge);
 
+  // Embaralha as opções sempre que um caso começa (round muda a cada início).
+  const [round, setRound] = useState(0);
+  const shuffled = useMemo(
+    () => ({
+      classifications: shuffle(c.classifications),
+      evidence: shuffle(c.evidence),
+      contrast: shuffle(c.contrast),
+      applications: shuffle(c.applications)
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [c.id, round]
+  );
+
   const teacherText = useMemo(() => {
     switch (stage) {
       case "investigate":
@@ -84,6 +99,7 @@ export function ChargeMissionScreen() {
 
   function startCase(id: string) {
     setCaseId(id);
+    setRound((value) => value + 1);
     setStage("investigate");
     setZoom(1);
     setOpenObservation(null);
@@ -194,7 +210,7 @@ export function ChargeMissionScreen() {
 
   return (
     <main className="charge-v6-page">
-      {rewardMessage && <div className="xp-toast" role="status" aria-live="polite"><span>★</span><b>{rewardMessage}</b></div>}
+      {rewardMessage && <div className="xp-toast" role="status" aria-live="polite"><span><Star size={18} fill="currentColor" aria-hidden="true" /></span><b>{rewardMessage}</b></div>}
       <header className="charge-v6-header">
         <div className="charge-v6-title">
           <span className="eyebrow">DISTRITO DA CHARGE</span>
@@ -346,7 +362,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-options">
-                  {c.classifications.map((item) => (
+                  {shuffled.classifications.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -384,7 +400,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-evidence">
-                  {c.evidence.map((item) => (
+                  {shuffled.evidence.map((item) => (
                     <label key={item.id}>
                       <input
                         type="checkbox"
@@ -434,7 +450,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-options stacked">
-                  {c.contrast.map((item) => (
+                  {shuffled.contrast.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -472,7 +488,7 @@ export function ChargeMissionScreen() {
                 </div>
 
                 <div className="charge-v6-applications">
-                  {c.applications.map((item) => (
+                  {shuffled.applications.map((item) => (
                     <button
                       type="button"
                       key={item.id}

@@ -1,4 +1,5 @@
 
+import { Sparkles, Star } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import cityMap from "../assets/city-map.webp";
@@ -92,14 +93,14 @@ export function CityMap() {
                     : `${progress[district.key]}% de domínio`}
               </em>
             </span>
-            {isRestored && <span className="restored-star" aria-hidden="true">★</span>}
+            {isRestored && <span className="restored-star" aria-hidden="true"><Star size={13} fill="currentColor" /></span>}
           </button>
         );
       })}
 
       {recentlyRestored && (
         <div className="restoration-toast" role="status" aria-live="polite">
-          <span>✨</span>
+          <span aria-hidden="true"><Sparkles size={22} /></span>
           <div>
             <b>{districts.find((item) => item.key === recentlyRestored)?.label} restaurado!</b>
             <small>Seu domínio completo devolveu luz a este distrito.</small>

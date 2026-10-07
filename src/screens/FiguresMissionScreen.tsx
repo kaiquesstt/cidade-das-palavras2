@@ -1,8 +1,10 @@
 
+import { ArrowLeftRight, Feather, Repeat, Smile, Sparkles, Star, type LucideIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
 import figuresImage from "../assets/figures-district.webp";
 import { useGameStore } from "../store/useGameStore";
+import { shuffle } from "../utils/shuffle";
 import { playableDistricts } from "../data/districts";
 
 type Stage =
@@ -51,7 +53,7 @@ const figures: Record<
   {
     name: string;
     power: string;
-    icon: string;
+    icon: LucideIcon;
     color: string;
     effect: string;
     example: string;
@@ -62,7 +64,7 @@ const figures: Record<
   anafora: {
     name: "Anáfora",
     power: "Eco",
-    icon: "↻",
+    icon: Repeat,
     color: "#79ddff",
     effect: "Criar ritmo e ênfase por repetição intencional no início de segmentos sucessivos.",
     example:
@@ -75,7 +77,7 @@ const figures: Record<
   eufemismo: {
     name: "Eufemismo",
     power: "Véu",
-    icon: "≈",
+    icon: Feather,
     color: "#d6b8ff",
     effect: "Suavizar uma ideia potencialmente dura, desagradável ou delicada.",
     example:
@@ -88,7 +90,7 @@ const figures: Record<
   metafora: {
     name: "Metáfora",
     power: "Portal",
-    icon: "◇",
+    icon: Sparkles,
     color: "#ff9f70",
     effect: "Construir uma imagem ao compreender uma realidade em termos de outra, sem comparação explícita.",
     example:
@@ -101,7 +103,7 @@ const figures: Record<
   comparacao: {
     name: "Comparação",
     power: "Ponte",
-    icon: "⇄",
+    icon: ArrowLeftRight,
     color: "#ffd65c",
     effect: "Aproximar explicitamente dois elementos para destacar uma semelhança.",
     example:
@@ -114,7 +116,7 @@ const figures: Record<
   personificacao: {
     name: "Personificação",
     power: "Sopro",
-    icon: "✦",
+    icon: Smile,
     color: "#8ef0a9",
     effect: "Atribuir ação, comportamento ou característica humana a seres não humanos.",
     example:
@@ -440,6 +442,15 @@ function blankCard(): CreationCard {
 }
 
 export function FiguresMissionScreen() {
+  // Embaralha as opções de cada pergunta a cada vez que a missão abre.
+  const shuffledWhyCases = useMemo(
+    () => whyCases.map((item) => ({ ...item, options: shuffle(item.options) })),
+    []
+  );
+  const shuffledContrastCases = useMemo(
+    () => contrastCases.map((item) => ({ ...item, options: shuffle(item.options) })),
+    []
+  );
   const setActiveView = useGameStore((s) => s.setActiveView);
   const markStage = useGameStore((s) => s.markStage);
   const addAchievement = useGameStore((s) => s.addAchievement);
@@ -589,7 +600,7 @@ export function FiguresMissionScreen() {
     <main className="figures-page">
       {rewardMessage && (
         <div className="xp-toast" role="status" aria-live="polite">
-          <span>★</span>
+          <span><Star size={18} fill="currentColor" aria-hidden="true" /></span>
           <b>{rewardMessage}</b>
         </div>
       )}
@@ -721,7 +732,7 @@ export function FiguresMissionScreen() {
                         style={{ "--lens-color": item.color } as React.CSSProperties}
                         onClick={() => setActiveFigure(key)}
                       >
-                        <span className="figures-lens-icon">{item.icon}</span>
+                        <span className="figures-lens-icon"><FigIcon icon={item.icon} size={24} /></span>
                         <small>{item.power.toUpperCase()}</small>
                         <b>{item.name}</b>
                         <p>{item.effect}</p>
@@ -739,7 +750,7 @@ export function FiguresMissionScreen() {
                   }
                 >
                   <div className="figures-lens-focus-icon">
-                    {figures[activeFigure].icon}
+                    <FigIcon icon={figures[activeFigure].icon} size={34} />
                   </div>
                   <div>
                     <span>
@@ -866,7 +877,7 @@ export function FiguresMissionScreen() {
                 </div>
 
                 <div className="figures-why-grid">
-                  {whyCases.map((item) => {
+                  {shuffledWhyCases.map((item) => {
                     const selected = whyAnswers[item.id];
                     const chosen = item.options.find(
                       (option) => option.id === selected
@@ -874,7 +885,7 @@ export function FiguresMissionScreen() {
                     return (
                       <article key={item.id}>
                         <div className="figures-why-label">
-                          <span>{figures[item.figure].icon}</span>
+                          <span><FigIcon icon={figures[item.figure].icon} /></span>
                           <b>{figures[item.figure].name}</b>
                         </div>
                         <blockquote>{item.text}</blockquote>
@@ -940,7 +951,7 @@ export function FiguresMissionScreen() {
                 </div>
 
                 <div className="figures-duel-stack">
-                  {contrastCases.map((item) => {
+                  {shuffledContrastCases.map((item) => {
                     const selected = contrastAnswers[item.id];
                     const chosen = item.options.find(
                       (option) => option.id === selected
@@ -1053,7 +1064,7 @@ export function FiguresMissionScreen() {
                               }
                               onClick={() => chooseApply(item.id, key)}
                             >
-                              {figures[key].icon} {figures[key].name}
+                              <FigIcon icon={figures[key].icon} /> {figures[key].name}
                             </button>
                           ))}
                         </div>
@@ -1137,7 +1148,7 @@ export function FiguresMissionScreen() {
                                   })
                                 }
                               >
-                                {figures[key].icon} {figures[key].name}
+                                <FigIcon icon={figures[key].icon} /> {figures[key].name}
                               </button>
                             );
                           })}
@@ -1242,7 +1253,7 @@ export function FiguresMissionScreen() {
                         key={index}
                         style={{ "--lens-color": item.color } as React.CSSProperties}
                       >
-                        <span>{item.icon}</span>
+                        <span><FigIcon icon={item.icon} /></span>
                         <small>{item.name}</small>
                         <p>“{card.text}”</p>
                       </article>
@@ -1315,4 +1326,9 @@ export function FiguresMissionScreen() {
       </div>
     </main>
   );
+}
+
+/** Ícone de uma figura de linguagem (Lucide). */
+function FigIcon({ icon: Icon, size = 18 }: { icon: LucideIcon; size?: number }) {
+  return <Icon size={size} strokeWidth={2.2} aria-hidden="true" style={{ verticalAlign: "-3px" }} />;
 }

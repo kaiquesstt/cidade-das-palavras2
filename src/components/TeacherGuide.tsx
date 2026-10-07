@@ -1,4 +1,5 @@
 
+import { Lightbulb, NotebookPen } from "lucide-react";
 import teacherImage from "../assets/teacher-guide.webp";
 import { districtByKey } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
@@ -55,10 +56,10 @@ export function TeacherGuide() {
               }
             }}
           >
-            💡 Dica
+            <Lightbulb size={16} aria-hidden="true" /> Dica
           </button>
           <button type="button" onClick={() => setActiveView("notebook")}>
-            📓 Caderno
+            <NotebookPen size={16} aria-hidden="true" /> Caderno
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 
+import { Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useGameStore } from "../store/useGameStore";
 
@@ -56,7 +57,7 @@ export function SettingsDialog({ open, onClose }: Props) {
             onClick={onClose}
             aria-label="Fechar configurações"
           >
-            ×
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 
@@ -131,7 +132,7 @@ export function SettingsDialog({ open, onClose }: Props) {
         </label>
 
         <div className="settings-save-note" role="note">
-          <span aria-hidden="true">✓</span>
+          <span aria-hidden="true"><Check size={18} strokeWidth={3} /></span>
           <div>
             <b>Progresso salvo automaticamente</b>
             <small>

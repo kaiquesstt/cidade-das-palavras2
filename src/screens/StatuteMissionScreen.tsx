@@ -1,8 +1,10 @@
 
+import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
 import statuteImage from "../assets/statute-district.webp";
 import { useGameStore } from "../store/useGameStore";
+import { shuffle } from "../utils/shuffle";
 
 type Stage =
   | "investigate"
@@ -278,6 +280,11 @@ function buildDraft(kind: NormKind, themeId: string, scope: string) {
 }
 
 export function StatuteMissionScreen() {
+  // Embaralha as opções a cada vez que a missão abre.
+  const shuffledClassifications = useMemo(() => shuffle(classifications), []);
+  const shuffledEvidenceOptions = useMemo(() => shuffle(evidenceOptions), []);
+  const shuffledContrastOptions = useMemo(() => shuffle(contrastOptions), []);
+  const shuffledApplicationCases = useMemo(() => shuffle(applicationCases), []);
   const setActiveView = useGameStore((s) => s.setActiveView);
   const markStage = useGameStore((s) => s.markStage);
   const addAchievement = useGameStore((s) => s.addAchievement);
@@ -400,7 +407,7 @@ export function StatuteMissionScreen() {
     <main className="statute-page">
       {rewardMessage && (
         <div className="xp-toast" role="status" aria-live="polite">
-          <span>★</span>
+          <span><Star size={18} fill="currentColor" aria-hidden="true" /></span>
           <b>{rewardMessage}</b>
         </div>
       )}
@@ -612,7 +619,7 @@ export function StatuteMissionScreen() {
                 </div>
 
                 <div className="statute-options">
-                  {classifications.map((item) => (
+                  {shuffledClassifications.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -678,7 +685,7 @@ export function StatuteMissionScreen() {
                 </div>
 
                 <div className="statute-evidence">
-                  {evidenceOptions.map((item) => (
+                  {shuffledEvidenceOptions.map((item) => (
                     <label key={item.id}>
                       <input
                         type="checkbox"
@@ -776,7 +783,7 @@ export function StatuteMissionScreen() {
                 </div>
 
                 <div className="statute-options stacked">
-                  {contrastOptions.map((item) => (
+                  {shuffledContrastOptions.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -842,7 +849,7 @@ export function StatuteMissionScreen() {
                 </div>
 
                 <div className="statute-application-grid">
-                  {applicationCases.map((item) => (
+                  {shuffledApplicationCases.map((item) => (
                     <button
                       type="button"
                       key={item.id}

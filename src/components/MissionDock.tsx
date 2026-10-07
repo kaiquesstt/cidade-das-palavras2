@@ -1,4 +1,5 @@
 
+import { ArrowRight, Star, Target } from "lucide-react";
 import { districtByKey } from "../data/districts";
 import { useGameStore } from "../store/useGameStore";
 
@@ -13,7 +14,7 @@ export function MissionDock() {
   return (
     <section className="mission-dock" aria-label="Missão atual">
       <div className="mission-icon" aria-hidden="true">
-        {restored ? "★" : "✓"}
+        {restored ? <Star size={22} fill="currentColor" /> : <Target size={22} />}
       </div>
 
       <div className="mission-copy">
@@ -55,8 +56,8 @@ export function MissionDock() {
             : restored
               ? "REVISAR MISSÃO"
               : "ENTRAR NA MISSÃO"
-          : "ESCOLHA UM DESTINO"}{" "}
-        →
+          : "ESCOLHA UM DESTINO"}
+        <ArrowRight size={18} strokeWidth={2.6} aria-hidden="true" />
       </button>
     </section>
   );

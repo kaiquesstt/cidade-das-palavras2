@@ -272,3 +272,13 @@ Principais mudanças:
 - Caso 1 "Pesquisando juntos?" (original), Caso 2 "Ninguém mete a colher", Caso 3 "Ele só é cuidadoso".
 - Concluir qualquer caso restaura o distrito; cada caso concluído dá o seu selo.
 - Casos sobre violência mostram um aviso de apoio (Ligue 180 / 190).
+
+## Opções embaralhadas — v17.3
+- `src/utils/shuffle.ts` embaralha as alternativas de todas as missões a cada abertura,
+  para que a resposta certa não fique sempre na mesma posição.
+- Ao escrever conteúdo novo, a ordem das opções no código não importa mais.
+
+## Ícones Lucide em todo o app — v17.4
+- Navegação, topo, configurações, painel da missão, mapa, professora-guia, avisos de XP,
+  selos de conquista e lentes das Figuras usam `lucide-react`.
+- Selos de bairro reutilizam o ícone do bairro (`DistrictIcon`).

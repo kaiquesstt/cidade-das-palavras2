@@ -1,8 +1,10 @@
 
+import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import teacherImage from "../assets/teacher-guide.webp";
 import letterImage from "../assets/reader-letter-district.webp";
 import { useGameStore } from "../store/useGameStore";
+import { shuffle } from "../utils/shuffle";
 
 type Stage =
   | "investigate"
@@ -322,6 +324,11 @@ const productionSources = [
 ];
 
 export function ReaderLetterMissionScreen() {
+  // Embaralha as opções a cada vez que a missão abre.
+  const shuffledClassifications = useMemo(() => shuffle(classifications), []);
+  const shuffledEvidenceOptions = useMemo(() => shuffle(evidenceOptions), []);
+  const shuffledContrastOptions = useMemo(() => shuffle(contrastOptions), []);
+  const shuffledApplicationTexts = useMemo(() => shuffle(applicationTexts), []);
   const setActiveView = useGameStore((s) => s.setActiveView);
   const markStage = useGameStore((s) => s.markStage);
   const addAchievement = useGameStore((s) => s.addAchievement);
@@ -466,7 +473,7 @@ export function ReaderLetterMissionScreen() {
     <main className="reader-letter-page">
       {rewardMessage && (
         <div className="xp-toast" role="status" aria-live="polite">
-          <span>★</span>
+          <span><Star size={18} fill="currentColor" aria-hidden="true" /></span>
           <b>{rewardMessage}</b>
         </div>
       )}
@@ -696,7 +703,7 @@ export function ReaderLetterMissionScreen() {
                 </div>
 
                 <div className="reader-letter-options">
-                  {classifications.map((item) => (
+                  {shuffledClassifications.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -755,7 +762,7 @@ export function ReaderLetterMissionScreen() {
                 </div>
 
                 <div className="reader-letter-evidence">
-                  {evidenceOptions.map((item) => (
+                  {shuffledEvidenceOptions.map((item) => (
                     <label key={item.id}>
                       <input
                         type="checkbox"
@@ -852,7 +859,7 @@ export function ReaderLetterMissionScreen() {
                 </div>
 
                 <div className="reader-letter-options stacked">
-                  {contrastOptions.map((item) => (
+                  {shuffledContrastOptions.map((item) => (
                     <button
                       type="button"
                       key={item.id}
@@ -918,7 +925,7 @@ export function ReaderLetterMissionScreen() {
                 </div>
 
                 <div className="reader-letter-application-grid">
-                  {applicationTexts.map((item) => (
+                  {shuffledApplicationTexts.map((item) => (
                     <button
                       type="button"
                       key={item.id}
